@@ -1,0 +1,21 @@
+print hello world
+
+~ this is a comment
+
+int x = 7
+
+~loop
+~ the above is a jump position
+if x > 0
+	~ this is a loop
+	print /x
+	int x = x 1 -
+	goto loop
+end
+
+int y = 14 6 +
+~ all expressions are postfix
+
+print value of y is /y
+
+print new features comming soon :)
