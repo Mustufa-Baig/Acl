@@ -1,6 +1,7 @@
 import sys
 code=""
 
+# Read the code into memory
 try:
     with open(sys.argv[1],'r') as file:
         code=file.read()
@@ -11,12 +12,16 @@ except:
     with open("last.txt",'r') as l:        
         with open(l.readlines()[0],'r') as file:
             code=file.read()
-    
 
+# seperate each lines , and remove empty ones
 lines=[line for line in code.split("\n") if len(line.replace(" ",""))>0]
 
+# variables of the program
 v={}
+
+# helper functions
 def read(line):
+    #returns a list of words of a line
     words=[""]
     i=0
     for char in line:
@@ -77,10 +82,29 @@ def var_maker(words,dtypes=dtypes,v=v):
             
 
 
+
+# cache conditional jump positions
+ifc=[]
+cond={}
+i=0
+for l in lines:
+    line=read(l)
+    if line[0]=='if':
+        ifc.append(i)
+        cond[i]=[]
+    if line[0]=='else':
+        cond[ifc[-1]].append(i)
+    if line[0]=='end':
+        cond[ifc.pop()].append(i)
+    i+=1
+#print(cond)
+
+ifc=[]
 i=0
 pc=0
 while pc<len(lines):
     line=lines[pc]
+    #print(line)
     pc+=1
 
     
@@ -137,12 +161,19 @@ while pc<len(lines):
             if ev_num(words[1:splt])<ev_num(words[splt+1:]):
                 skp=True
 
+        ifc.append(pc-1)
         if skp:
-            while not(lines[pc][:3] == "end"):
-                pc+=1
-            pc+=1
+            if len(cond[pc-1])==1:
+                ifc.pop()
+            pc=cond[pc-1][0]+1
+            
+            
+    elif words[0].lower() == 'else':
+        pc=cond[ifc[-1]][1]
+    elif words[0].lower() == 'end':
+        ifc.pop()
     else:
         pass
     
 #print(v)
-end=input("\n\n<Program executed>\n<Press 'Enter' to exit>")
+end=input("\n<Program executed>\n<Press 'Enter' to exit>")
