@@ -212,8 +212,8 @@ for l in lines:
 ifc=[]
 i=0
 pc=0
-print(cond)
-print(gt)
+#print(cond)
+#print(gt)
 while pc<len(lines):
     #print("->",ifc)
     line=lines[pc]
