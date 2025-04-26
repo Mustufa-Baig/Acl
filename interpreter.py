@@ -162,7 +162,11 @@ gt={}
 i=0
 for l in lines:
     line=read(l)
-    #print(cond)
+    if len(line)==0:
+        i+=1
+        continue
+    
+    
     if line[0]=='if':
         ifc.append(i)
         cond[i]=[]
@@ -171,18 +175,22 @@ for l in lines:
     if line[0]=='end':
         cond[ifc.pop()].append(i)
     i+=1
+    #print(cond)
 
 i=0
 ifc=[]
 for l in lines:
     line=read(l)
-
+    if len(line)==0:
+        i+=1
+        continue
+    
     if line[0]=='if':
         ifc.append(i)
     if line[0]=='end':
         ifc.pop()
 
-
+            
     if line[0]=='goto':
         tc=0
         while tc<len(lines):
@@ -204,16 +212,23 @@ for l in lines:
 ifc=[]
 i=0
 pc=0
+print(cond)
+print(gt)
 while pc<len(lines):
     #print("->",ifc)
     line=lines[pc]
-    #print(line)
+    #print(pc,line)
     pc+=1
+    if len(line)==0:
+        continue
 
     
     if line[0]=="~":
         continue
     words=read(line)
+    if len(words)==0:
+        continue
+    
     if words[0].lower() in dtypes:
         var_maker(words)
     elif words[0].lower() == 'goto':
