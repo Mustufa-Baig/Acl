@@ -1,0 +1,29 @@
+~ Basic implementation of FizzBuzz in ACL
+
+printl Enter a number ->
+int limit=input
+int n = 1
+
+~start
+
+string output=''
+int x=0
+
+if n 3%=0
+	string output='Fizz'
+	int x=1
+end
+
+if n 5%=0
+	string output=output 'Buzz'+
+	int x=1
+end
+
+if x=1
+	print ^n ' -> '+ output+^
+end
+
+if n<limit
+int n =n 1+
+goto start
+end
