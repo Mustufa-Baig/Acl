@@ -1,0 +1,18 @@
+~ ACL program to calculate the first n numbers in Fibonacci series
+
+printl Enter a number ->
+int n = input
+int b = 0
+int a = 1
+
+~reset
+int temp = a
+int a = a b+
+int b = temp
+
+print ^a^
+
+if n>0
+int n=n 1-
+goto reset
+end
