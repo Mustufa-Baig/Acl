@@ -20,6 +20,8 @@ if current d%=0
 	if current<limit
 		int current=next
 		goto loop_for_next_prime	
+	else
+		goto eof
 	end
 else
 	if d<current
@@ -37,3 +39,4 @@ if current<limit
 	int current=next
 	goto loop_for_next_prime
 end
+~eof
