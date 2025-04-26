@@ -1,0 +1,39 @@
+~ ACL program to find all primes upto a given number
+
+
+printl Enter a number ->
+int limit=input
+
+int current = 3
+
+print 2
+~loop_for_next_prime
+int next = current 1 +
+int d = 2
+
+~loop_for_next_denominator
+if current d%=0
+	if d=current
+		goto found_prime
+	end
+	
+	if current<limit
+		int current=next
+		goto loop_for_next_prime	
+	end
+else
+	if d<current
+		int d=d 1+
+		goto loop_for_next_denominator
+	end
+end
+
+
+~found_prime
+
+print ^current^
+
+if current<limit
+	int current=next
+	goto loop_for_next_prime
+end
