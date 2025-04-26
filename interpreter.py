@@ -3,19 +3,27 @@ code=""
 
 # Read the code into memory
 try:
+    # Load file from cli input
     with open(sys.argv[1],'r') as file:
         code=file.read()
-    with open("last.txt",'w') as l:        
+    with open("last.txt",'w') as l:     
         l.write(sys.argv[1])
     print("<Running ",sys.argv[1],">")
     
 except:
-    with open("last.txt",'r') as l:
-        fname=l.readlines()[0]
-        with open(fname,'r') as file:
-            code=file.read()
-        print("< Running ",fname,">")
-    
+    try:
+        # try to Load last read file
+        with open("last.txt",'r') as l:
+            fname=l.readlines()[0]
+            with open(fname,'r') as file:
+                code=file.read()
+            print("< Running ",fname,">")
+    except:
+        # return an error
+        print("Error: No input file given")
+        print("\n<Program execution terminated>")
+        sys.exit()
+
 
 # seperate each lines , and remove empty ones
 lines=[line for line in code.split("\n") if len(line.replace(" ",""))>0]
@@ -67,26 +75,29 @@ def read(line,sym=sym):
     return ws
 
 
-halt=[False]
-def terminate(halt=halt):
-    halt[0]=True
-    
 
 def ev_num(expr,sym=sym,v=v):
+    end=""
+    for e in expr:
+        end+=e+' '
     stack=[]
     ans=0
     for ele in expr:
         if ele in sym:
-            b=stack.pop()
-            a=stack.pop()
-
+            try:
+                b=stack.pop()
+                a=stack.pop()
+            except:
+                print("Expression error: invalid expression [ ",end,"]")
+                end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+                sys.exit()
+                
             if type(a)==str or type(b)==str:                
                 if ele=='+':
                     ans=str(a)+str(b)
                 elif ele=='*' and (type(a)==int or type(b)==int):
                     ans=a*b
                 else:
-                    terminate()
                     print("Type error: cannot perform ",end="")
                     if ele=='*':
                         print("multiplication ",end="")
@@ -98,7 +109,9 @@ def ev_num(expr,sym=sym,v=v):
                         print("modulus ",end="")
                     elif ele=='+':
                         print("addition ",end="")
-                    print("with strings")
+                    print("with strings [",end,"]")
+                    end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+                    sys.exit()
             else:
                 if ele=='+':
                     ans=a+b
@@ -107,9 +120,19 @@ def ev_num(expr,sym=sym,v=v):
                 elif ele=='*':
                     ans=a*b
                 elif ele=='/':
-                    ans=a/b
+                    try:
+                        ans=a/b
+                    except:
+                        print("Expression error: cannot divide the expression [ ",end,"]")
+                        end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+                        sys.exit()
                 elif ele=='%':
-                    ans=a%b
+                    try:
+                        ans=a%b
+                    except:
+                        print("Expression error: cannot find modulo in expression [ ",end,"]")
+                        end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+                        sys.exit()
                     
             stack.append(ans)
         else:
@@ -127,15 +150,21 @@ def ev_num(expr,sym=sym,v=v):
                     stack.append(v[ele])
                 else:
                     if '.' in ele:
-                        stack.append(float(ele))
+                        try:
+                            stack.append(float(ele))
+                        except:
+                            print("Expression Error: invalid input {",ele,"} in [",end,"]")
+                            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+                            sys.exit()
                     elif "'" in ele:
                         stack.append(ele.replace("'",''))
                     else:
                         try:
                             stack.append(int(ele))
                         except:
-                            print("Expression Error: invalid input {",ele,"}")
-                            terminate()
+                            print("Expression Error: invalid input {",ele,"} in [",end,"]")
+                            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+                            sys.exit()
                         
     if len(stack)!=0:
         ans=stack[0]
@@ -145,12 +174,32 @@ def ev_num(expr,sym=sym,v=v):
 dtypes=['int','float','string']
 def var_maker(words,dtypes=dtypes,v=v,sym=sym):
     expr=words[3:]
+    end=''
+    for e in words:
+        end+=e+' '
     if words[0]=='int':
-        v[words[1]]=int(ev_num(expr))
+        try:
+            v[words[1]]=int(ev_num(expr))
+        except:
+            print("Type error: cannot convert expression to int [ ",end,"]")
+            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+            sys.exit()
+            
     elif words[0]=='float':
-        v[words[1]]=float(ev_num(expr))
+        try:
+            v[words[1]]=float(ev_num(expr))
+        except:
+            print("Type error: cannot convert expression to float [",end,"]")
+            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+            sys.exit()
+            
     elif words[0]=='string':
-        v[words[1]]=str(ev_num(expr))
+        try:
+            v[words[1]]=str(ev_num(expr))
+        except:
+            print("Type error: cannot evaluate expression [",end,"]")
+            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+            sys.exit()
     
 
 
@@ -222,11 +271,12 @@ while pc<len(lines):
     if len(line)==0:
         continue
 
-    
-    if line[0]=="~":
-        continue
     words=read(line)
+    #print(words)
     if len(words)==0:
+        continue
+
+    if words[0][0]=="~":
         continue
     
     if words[0].lower() in dtypes:
@@ -302,20 +352,25 @@ while pc<len(lines):
             elif len(cond[pc-1])==1:
                 pc=cond[pc-1][0]
             else:
-                print("SYNTAX ERROR: invalid conditional")
-                terminate()
-            
-            
+                print("SYNTAX ERROR: invalid conditional , at line",pc)
+                end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+                sys.exit()
             
     elif words[0].lower() == 'else':
         pc=cond[ifc[-1]][1]
     elif words[0].lower() == 'end':
         #print(pc)
-        ifc.pop()
+        try:
+            ifc.pop()
+        except:
+            print("SYNTAX ERROR: cannot evaluate conditional , at line",pc)
+            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+            sys.exit()
+        
     else:
-        pass
-
-    if halt[0]:
-        break
+        print("SYNTAX ERROR: invalid syntax , at line",pc,"  [",line,"]")
+        end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
+        sys.exit()
+    
 
 end=input("\n<Program executed>\n<Press 'Enter' to exit>")
