@@ -1,21 +1,125 @@
+~ Demo program for new users
+
 print hello world
 
+
+
+
 ~ this is a comment
+~this_is_a_jump_position
 
-int x = 7
+~ comments without spaces are considered as jump positions
 
-~loop
-~ the above is a jump position
-if x > 0
-	~ this is a loop
-	print /x
-	int x = x 1 -
-	goto loop
+
+
+
+int num = 7
+float pi = 3.14
+string name = 'Mustufa'
+~ ACL currently only supports 3 basic datatypes
+
+
+
+
+int num = num 3+
+~ all notations are Postfix
+
+
+string name = name ' Baig' +
+string greet = 'he' 'l' 2*+ 'o '+
+~ strings support concatenation and multiplication
+
+
+
+print Pi is ^pi^
+~ variables can be added in print statements, using ^expression^ synatax
+
+
+print ^greet 2*^
+print calculated answer = ^3 7+ 5* 9 5+ +^ and ^8 2 2* *^
+~ the ^expression^ synatax in print statements also applies to calculations
+
+
+
+
+
+
+if num 2%=0
+	print ^num^ is even
+else
+	print ^num^ is odd
 end
 
-int y = 14 6 +
-~ all expressions are postfix
+~ the above is a conditional statement
+	~ all indentation is ignored
+		~ and is completely optional and subjective
 
-print value of y is /y
+~ ACL currently support + - * / %
+~ as well as comparison operators < <= > >= = != 
 
-print new features comming soon :)
+
+
+
+
+
+
+printl Enter a number ->
+~ this is single line print statement 
+
+int num = input
+~ the input keyword prompts the user for a keyboard input in the console
+
+
+
+
+
+
+printl Enter a word ->
+string name = input
+~ and works on all datatypes
+
+
+printl Enter another number ->
+print ^name num input/ +^ is a concatenated string
+~ also works in print ^expression^ syntax
+
+
+
+
+
+
+~another_jump_position
+
+if num<0
+print ^num^
+int num=num 1+
+goto another_jump_position
+~ goto is a jump statement that skips(teleports) you to any jump position in the code
+end
+
+
+
+
+
+
+if num=0
+	if name='hello world'
+		print :)
+	else
+		print :-)
+	end
+else
+	print ;)
+end
+~ nested if statements have no virtual count-limit
+~ add as many as you need :)
+
+
+
+
+
+
+
+~ More features to be added soon :)
+~ ACL - by Mustufa Baig
+
