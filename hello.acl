@@ -15,7 +15,7 @@ print hello world
 
 int num = 7
 float pi = 3.14
-string name = 'Mustufa'
+string name = "Mustufa"
 ~ ACL currently only supports 3 basic datatypes
 
 
@@ -25,8 +25,8 @@ int num = num 3+
 ~ all notations are Postfix
 
 
-string name = name ' Baig' +
-string greet = 'he' 'l' 2*+ 'o '+
+string name = name " Baig" +
+string greet = "he" "l" 2*+ "o "+
 ~ strings support concatenation and multiplication
 
 
