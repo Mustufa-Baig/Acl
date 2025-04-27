@@ -63,7 +63,7 @@ def save_quit():
 windll.shcore.SetProcessDpiAwareness(1)
 
 root = Tk()
-root.title("ACL Ide")
+root.title("ACL Ide - "+filename)
 root.configure(bg="gray10")
 root.geometry(str(size[0])+"x"+str(size[1]))
 root.minsize(*size)
