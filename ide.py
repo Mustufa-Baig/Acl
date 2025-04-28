@@ -68,8 +68,9 @@ def f_down(key,total=total):
 
     
 def save_quit():
-    with open(filename,'w') as file:
-        file.write(t.get("1.0",tk_end))
+    if len(t.get("1.0",tk_end))>1:
+        with open(filename,'w') as file:
+            file.write(t.get("1.0",tk_end))
     root.destroy()
 
 
@@ -80,6 +81,7 @@ def highlight_words(event=None):
     t.tag_remove("yellow", "1.0", "end")
     t.tag_remove("red", "1.0", "end")
     t.tag_remove("green", "1.0", "end")
+    t.tag_remove("gray", "1.0", "end")
 
     l=0
     for line in t.get("1.0",END).split("\n"):
@@ -118,7 +120,11 @@ def highlight_words(event=None):
                 if next_char in [""," ","\n","\t"] and not(word in ["~","^"]):
                     t.tag_add("yellow", start, end)
                 elif word=="~":
-                    t.tag_add("red", start, str(end.split(".")[0])+".end")
+                    if ' ' in t.get(start.split('.')[0]+".0",start.split('.')[0]+".end").split("~")[1]:
+                        t.tag_add("gray", start, str(end.split(".")[0])+".end")
+                        
+                    else:
+                        t.tag_add("red", start, str(end.split(".")[0])+".end")
 
             start = end
 
@@ -179,6 +185,7 @@ with open(filename,'r') as file:
 t.pack(padx=5,side='top',fill='both',expand=True)                    
 t.tag_configure("yellow", foreground="yellow")
 t.tag_configure("green", foreground="green")
+t.tag_configure("gray", foreground="grey60")
 t.tag_configure("red", foreground="red")
 
 highlight_words()
