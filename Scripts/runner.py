@@ -1,9 +1,20 @@
 import sys
+import pyautogui,time
 
 # variables of the program
 v={}
 sym=['+','-','*','/','%']
+ts=[False]
 
+def terminate(ts=ts):
+    if not(ts[0]):
+        time.sleep(1)
+        pyautogui.keyDown('alt')
+        pyautogui.press('Tab')
+        time.sleep(0.1)
+        pyautogui.keyUp('alt')
+        ts[0]=True
+    sys.exit()
 
 def ev_num(expr,sym=sym,v=v):
     end=""
@@ -19,8 +30,8 @@ def ev_num(expr,sym=sym,v=v):
                 #print('[',a,':',b,':',ele,']',stack)
             except:
                 print("Expression error: invalid expression [ ",end,"]")
-                end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-                sys.exit()
+                
+                terminate()
                 
             if type(a)==str or type(b)==str:                
                 if ele=='+':
@@ -40,8 +51,8 @@ def ev_num(expr,sym=sym,v=v):
                     elif ele=='+':
                         print("addition ",end="")
                     print("with strings [",end,"]")
-                    end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-                    sys.exit()
+                    
+                    terminate()
             else:
                 if ele=='+':
                     ans=a+b
@@ -54,15 +65,15 @@ def ev_num(expr,sym=sym,v=v):
                         ans=a/b
                     except:
                         print("Expression error: cannot divide the expression [ ",end,"]")
-                        end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-                        sys.exit()
+                        
+                        terminate()
                 elif ele=='%':
                     try:
                         ans=a%b
                     except:
                         print("Expression error: cannot find modulo in expression [ ",end,"]")
-                        end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-                        sys.exit()
+                        
+                        terminate()
                     
             stack.append(ans)
         else:
@@ -84,8 +95,8 @@ def ev_num(expr,sym=sym,v=v):
                             stack.append(float(ele))
                         except:
                             print("Expression Error: invalid input {",ele,"} in [",end,"]")
-                            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-                            sys.exit()
+                            
+                            terminate()
                     elif '"' in ele:
                         stack.append(ele.replace('"',''))
                     else:
@@ -93,8 +104,8 @@ def ev_num(expr,sym=sym,v=v):
                             stack.append(int(ele))
                         except:
                             print("Expression Error: invalid input {",ele,"} in [",end,"]")
-                            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-                            sys.exit()
+                            
+                            terminate()
                         
     if len(stack)!=0:
         #print(stack)
@@ -113,24 +124,24 @@ def var_maker(words,dtypes=dtypes,v=v,sym=sym):
             v[words[1]]=int(ev_num(expr))
         except:
             print("Type error: cannot convert expression to int [ ",end,"]")
-            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-            sys.exit()
+            
+            terminate()
             
     elif words[0]=='float':
         try:
             v[words[1]]=float(ev_num(expr))
         except:
             print("Type error: cannot convert expression to float [",end,"]")
-            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-            sys.exit()
+            
+            terminate()
             
     elif words[0]=='string':
         try:
             v[words[1]]=str(ev_num(expr))
         except:
             print("Type error: cannot evaluate expression [",end,"]")
-            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-            sys.exit()
+            
+            terminate()
     
 
 
@@ -219,8 +230,8 @@ def run(lines,gt,cond,dtypes=dtypes,v=v):
                     pc=cond[pc-1][0]
                 else:
                     print("SYNTAX ERROR: invalid conditional , at line",pc)
-                    end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-                    sys.exit()
+                    
+                    terminate()
                 
         elif words[0].lower() == 'else':
             pc=cond[ifc[-1]][1]
@@ -229,12 +240,12 @@ def run(lines,gt,cond,dtypes=dtypes,v=v):
                 ifc.pop()
             except:
                 print("SYNTAX ERROR: cannot evaluate conditional , at line",pc)
-                end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-                sys.exit()
+                
+                terminate()
             
         else:
             print("SYNTAX ERROR: invalid syntax , at line",pc,"  [",line,"]")
-            end=input("\n<Program execution terminated>\n<Press 'Enter' to exit>")
-            sys.exit()
+            
+            terminate()
 
             
