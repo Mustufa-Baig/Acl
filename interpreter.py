@@ -1,4 +1,5 @@
-import sys
+import sys,os
+import pyautogui
 from Scripts import error_checker
 from Scripts import pre_loader
 from Scripts import runner
@@ -50,3 +51,5 @@ if len(syn_err)==0 and len(typ_err)==0:
 
     
 end=input("\n<Program executed>\n<Press 'Enter' to exit>")
+os.system('cls')
+pyautogui.hotkey(['alt','tab'])
