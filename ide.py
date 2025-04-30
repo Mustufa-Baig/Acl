@@ -21,16 +21,34 @@ def update_config(index,amount,total=total):
 
 
 try:
-    size=[int(sys.argv[1]),int(sys.argv[2])]
-    f_size=int(sys.argv[3])
-    filename=sys.argv[4]
-    total=""
-    for s in sys.argv[1:]:
-        total+=s+" "
+    if len(sys.argv)==2:
+        filename=sys.argv[1]
+
+        with open("Luts/config.txt",'r') as l:
+            total=l.read()
+        t=total.split(" ")[:-1]
+        size=[int(t[0]),int(t[1])]
+        f_size=int(t[2])
+        total=""
+        for i in t:
+            total+=i+" "
+        total+=sys.argv[1]
         
-    with open("Luts/config.txt",'w') as file:
-        file.write(total[:-1])
-    total=total[:-1].split(' ')
+        with open("Luts/config.txt",'w') as l:
+            l.write(total)
+        
+            
+    else:
+        size=[int(sys.argv[1]),int(sys.argv[2])]
+        f_size=int(sys.argv[3])
+        filename=sys.argv[4]
+        total=""
+        for s in sys.argv[1:]:
+            total+=s+" "
+            
+        with open("Luts/config.txt",'w') as file:
+            file.write(total[:-1])
+        total=total[:-1].split(' ')
     print("<Updated Config.txt>")
     
 except:
@@ -68,14 +86,16 @@ def f_down(key,total=total):
 
     
 def save_quit():
-    if len(t.get("1.0",tk_end))>1:
-        with open(filename,'w') as file:
-            file.write(t.get("1.0",tk_end))
+    with open(filename,'w') as file:
+        c=t.get("1.0",tk_end)
+        if c[-1]==" ":
+            c=c[:-1]
+        file.write(c)
     root.destroy()
 
 
 # Words to highlight in yellow
-word_list = ["int","float","string","if","else","end","goto","~","^","print","printl"]
+word_list = ["int","float",'list',"string","if","else","end","goto","~","^","print","printl"]
 
 def highlight_words(event=None):
     t.tag_remove("yellow", "1.0", "end")
@@ -101,7 +121,7 @@ def highlight_words(event=None):
                         
                 i+=1
                 
-    #content=t.get(f"{line}.0", f"{line}.end").replace("\t",' ')
+    #content=t.get(f"{line}.0", f"{line}.end").replace("\t",'')
     
     for word in word_list:
         start = "1.0"
@@ -120,9 +140,8 @@ def highlight_words(event=None):
                 if next_char in [""," ","\n","\t"] and not(word in ["~","^"]):
                     t.tag_add("yellow", start, end)
                 elif word=="~":
-                    if ' ' in t.get(start.split('.')[0]+".0",start.split('.')[0]+".end").split("~")[1]:
+                    if " " in t.get(start.split('.')[0]+".0",start.split('.')[0]+".end"):
                         t.tag_add("gray", start, str(end.split(".")[0])+".end")
-                        
                     else:
                         t.tag_add("red", start, str(end.split(".")[0])+".end")
 
@@ -185,8 +204,8 @@ with open(filename,'r') as file:
 t.pack(padx=5,side='top',fill='both',expand=True)                    
 t.tag_configure("yellow", foreground="yellow")
 t.tag_configure("green", foreground="green")
-t.tag_configure("gray", foreground="grey60")
 t.tag_configure("red", foreground="red")
+t.tag_configure("gray", foreground="gray80")
 
 highlight_words()
 t.bind("<KeyRelease>",highlight_words)

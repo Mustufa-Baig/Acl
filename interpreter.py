@@ -12,15 +12,24 @@ try:
     # Load file from cli input
     with open(sys.argv[1],'r') as file:
         code=file.read()
-    with open("last.txt",'w') as l:     
-        l.write(sys.argv[1])
+
+    with open("Luts/config.txt",'r') as l:
+        total=l.read()
+    t=total.split(" ")[:-1]
+    total=""
+    for i in t:
+        total+=i+" "
+    total+=sys.argv[1]
+    
+    with open("Luts/config.txt",'w') as l:
+        l.write(total)
     print("<Running ",sys.argv[1],">")
     
 except:
     try:
         # try to Load last read file
-        with open("last.txt",'r') as l:
-            fname=l.readlines()[0]
+        with open("Luts/config.txt",'r') as l:
+            fname=l.readlines()[0].split(" ")[-1]
             with open(fname,'r') as file:
                 code=file.read()
             print("< Running ",fname,">")
