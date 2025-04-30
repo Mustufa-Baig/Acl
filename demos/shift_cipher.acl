@@ -1,0 +1,39 @@
+~ shift cypher in acl
+
+string alphabet="abcdefghijklmnopqrstuvwxyz"
+int key=1
+
+printl Enter a string to Encrypt ->
+string name=input
+string encr=""
+
+int str_len=#name
+int str_index=0
+
+
+int sample_index=0
+
+~check
+if name[str_index]=alphabet[sample_index]
+	int sample_index=sample_index key+
+	if sample_index>25
+		int sample_index=sample_index 26-
+	end
+	string encr=encr alphabet[sample_index]+
+else
+	int sample_index=sample_index 1+
+	if sample_index>#alphabet 1-
+		string encr=encr name[str_index]+
+		int str_index=str_index 1+
+		int sample_index=0
+	end
+	goto check
+end
+
+int str_index=str_index 1+
+if str_index<str_len
+	int sample_index=0
+	goto check
+end
+
+print ^encr^
