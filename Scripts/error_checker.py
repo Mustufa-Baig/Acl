@@ -1,5 +1,5 @@
-keywords=["int","float","string","if","else","end","goto","~","print","printl"]
-dtypes=["int","float","string"]
+keywords=["int","float","list","string","if","else","end","goto","~","print","printl"]
+dtypes=["int","float","list","string"]
 
 def check_syntax_errors(code,keywords=keywords,dtypes=dtypes):
     errors=[]
@@ -56,7 +56,7 @@ def check_type_errors(code,v,dtypes=dtypes):
     for instruction in code:
         if instruction[0] in dtypes:
             if len(instruction)==4:
-                if instruction[3]=='input':
+                if instruction[3]=='input' or "[" in instruction[3] or instruction[3][0]=="#":
                     continue
                 
                 if instruction[0]=='int':

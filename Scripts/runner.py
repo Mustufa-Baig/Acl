@@ -101,7 +101,24 @@ def ev_num(expr,sym=sym,v=v):
                         stack.append(ele.replace('"',''))
                     else:
                         try:
-                            stack.append(int(ele))
+                            if "[" in ele and "]" in ele:
+                                if ele.split("[")[0] in v:
+                                    try:
+                                        val=v[ele.split("[")[0]][int(ev_num([ele.split("[")[1].split("]")[0]]))]
+                                        stack.append(val)
+                                    except Exception as e:
+                                        if "not subscriptable" in str(e):
+                                            print("Type error: Cannot index into [",ele.split("[")[0],"]")
+                                        else:
+                                            print("Type error: invalid index {",ele,"} in [",end,"]")
+                                        terminate()
+                                else:
+                                    print("Expression Error: list {",ele.split("[")[0],"} does'nt exist in [",end,"]")
+                            else:
+                                if "#" in ele:
+                                    stack.append(len(v[ele[1:]]))
+                                else:
+                                    stack.append(int(ele))
                         except:
                             print("Expression Error: invalid input {",ele,"} in [",end,"]")
                             
@@ -113,7 +130,7 @@ def ev_num(expr,sym=sym,v=v):
     return ans
 
 
-dtypes=['int','float','string']
+dtypes=['int','float','list','string']
 def var_maker(words,dtypes=dtypes,v=v,sym=sym):
     expr=words[3:]
     end=''
@@ -142,7 +159,12 @@ def var_maker(words,dtypes=dtypes,v=v,sym=sym):
             print("Type error: cannot evaluate expression [",end,"]")
             
             terminate()
-    
+    elif words[0]=='list':
+        try:
+            v[words[1]]=[int(i) for i in expr]
+        except:
+            print("Type error: cannot evaluate expression [",end,"]")
+            terminate()
 
 
 
@@ -175,6 +197,11 @@ def run(lines,gt,cond,dtypes=dtypes,v=v):
                     if w[0] == '^' and w[-1] == '^' and len(w)>1:
                         if w.replace('^','') in v:
                             print(v[w.replace('^','')],end=" ")
+                        elif "[" in w.replace('^','') and "]" in w.replace('^',''):
+                            if w.replace('^','').split("[")[0] in v:
+                                print(ev_num([w.replace('^','')]),end=" ")
+                            else:
+                                print(w,end=" ")
                         else:
                             print(w,end=" ")
                     else:
@@ -244,8 +271,8 @@ def run(lines,gt,cond,dtypes=dtypes,v=v):
                 terminate()
             
         else:
-            print("SYNTAX ERROR: invalid syntax , at line",pc,"  [",line,"]")
+            print("SYNTAX ERROR: invalid syntax , at line",pc,"  [",lines[pc-1],"]")
             
             terminate()
 
-            
+

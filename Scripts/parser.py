@@ -13,7 +13,7 @@ def read(line,sym=sym):
             else:
                 words.append('"')
             continue
-        
+            
         if not(is_str) and (char==" " or char in sym or char in ['=','!','<','>']):
             if char == ' ':
                 words.append('')
@@ -60,7 +60,7 @@ def extract_code(code):
     v_temp=[]
     for line in lines:
         code.append(read(line))
-        if code[-1][0] in ['int','float','string']:
+        if code[-1][0] in ['int','float','list','string']:
             if not(code[-1][1] in v_temp):
                 v_temp.append(code[-1][1])
 
