@@ -29,7 +29,12 @@ except:
     try:
         # try to Load last read file
         with open("Luts/config.txt",'r') as l:
-            fname=l.readlines()[0].split(" ")[-1]
+            fname=l.readlines()[0].split(" ")
+            if len(fname[-1])>0:
+                fname=fname[-1]
+            else:
+                fname=fname[-2]
+                
             with open(fname,'r') as file:
                 code=file.read()
             print("< Running ",fname,">")
