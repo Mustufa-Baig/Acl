@@ -1,6 +1,12 @@
 import sys
 import subprocess
-import pyautogui,time
+try:
+    import pyautogui,time
+except:
+    import pip
+    pip.main(['install','pyautogui'])
+    import pyautogui,time
+    
 
 total=[]
 filename="temp.acl"
